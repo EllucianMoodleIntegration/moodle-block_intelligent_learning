@@ -80,6 +80,7 @@ class block_intelligent_learning extends block_list {
         $retentionlink     = $config->retentionalertlink;
         $stgradebookpid    = $config->stgradebookpid;
         $attendancelink    = $config->dailyattendancelink;
+        $midtermgradecolumns = $config->midtermgradecolumns;
 
         // Check to make sure the settings have been set.
         if (empty($ilpurl)) {
@@ -111,8 +112,10 @@ class block_intelligent_learning extends block_list {
             $gradebookapp = $config->gradebookapp;
             if ($gradebookapp == 'moodle') {
                 if ($helper->gradeperiod()) {
-                    $midtermgradelink = get_string('midtermgrades', 'block_intelligent_learning');
-                    $this->content->items[] = html_writer::link("$CFG->wwwroot/blocks/intelligent_learning/view.php?controller=midtermgrades&action=edit&courseid=$COURSE->id", $midtermgradelink, array('title' => $midtermgradelink));
+                    if ($midtermgradecolumns > 0) {
+                        $midtermgradelink = get_string('midtermgrades', 'block_intelligent_learning');
+                        $this->content->items[] = html_writer::link("$CFG->wwwroot/blocks/intelligent_learning/view.php?controller=midtermgrades&action=edit&courseid=$COURSE->id", $midtermgradelink, array('title' => $midtermgradelink));
+                    }
 
                     $finalgradelink = get_string('finalgrades', 'block_intelligent_learning');
                     $this->content->items[] = html_writer::link("$CFG->wwwroot/blocks/intelligent_learning/view.php?controller=finalgrades&action=edit&courseid=$COURSE->id", $finalgradelink, array('title' => $finalgradelink));

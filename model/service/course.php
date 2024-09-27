@@ -348,7 +348,7 @@ class blocks_intelligent_learning_model_service_course extends blocks_intelligen
         $course   = (object) $course;
         $defaults = array(
             'startdate'      => time() + 3600 * 24,
-            'summary'        => get_string('defaultcoursesummary'),
+            'summary'        => '',
             'format'         => 'weeks',
             'guest'          => 0,
             'numsections'	 => 10,
