@@ -39,7 +39,8 @@ require_once($CFG->dirroot.'/blocks/intelligent_learning/model/service/abstract.
 require_once($CFG->dirroot.'/course/lib.php');
 require_once($CFG->dirroot.'/course/format/lib.php');
 require_once("$CFG->dirroot/enrol/meta/locallib.php");
-
+require_once($CFG->dirroot.'/lib/gradelib.php');
+require_once($CFG->dirroot.'/grade/querylib.php');
 /**
  * Course Service Model
  *
@@ -274,11 +275,17 @@ class blocks_intelligent_learning_model_service_course extends blocks_intelligen
                         ));
                     }
 
-                    $grade = $this->getGradeDetails($gradeRecords, $record->userid);
+                   $grade = $this->getGradeDetails($gradeRecords, $record->userid);
+                   $gradeitem = grade_item::fetch_course_item($id);                    
+                   $currentgrade_realletter = grade_format_gradevalue($grade->finalgrade, $gradeitem, true, GRADE_DISPLAY_TYPE_REAL_LETTER);
+                   $currentgrade_letter = grade_format_gradevalue($grade->finalgrade, $gradeitem, true, GRADE_DISPLAY_TYPE_LETTER);
+                
                     $grades = array(
                         "courseid" => $grade->courseid,
                         "grade" => $grade->finalgrade,
-                        "rawgrade" => $grade->rawgrade
+                        "rawgrade" => $grade->rawgrade,
+                        "currentgradeRealLetter" => $currentgrade_realletter,
+                        "currentgradeLetter" => $currentgrade_letter
                     );
 
                     $user[] =array( "user" => array(
@@ -308,7 +315,7 @@ class blocks_intelligent_learning_model_service_course extends blocks_intelligen
 	 * @param courseCategoryId The course categoryId present in mdl_course_categories
      * returns boolean if the time exceeds the cutoff time
 	 */
-   public function exceededCategoryGradeCutOff($courseCategoryId) {
+    public function exceededCategoryGradeCutOff($courseCategoryId) {
         $config = get_config('blocks/intelligent_learning', 'categorycutoff');
         $categoryArr = [];
         if (!empty($config)) {
@@ -319,7 +326,7 @@ class blocks_intelligent_learning_model_service_course extends blocks_intelligen
         }
     
         return false;
-   }
+    }
 
     private function getGradeDetails($allGrades, $userId){
         foreach($allGrades as $grade){
@@ -424,7 +431,7 @@ class blocks_intelligent_learning_model_service_course extends blocks_intelligen
             // Create a default section.
             course_create_sections_if_missing($course, 0);
 
-            blocks_add_default_course_blocks($course);
+            //blocks_add_default_course_blocks($course); //causes duplicate blocks
         } catch (dml_exception $e) {
             throw new Exception("Failed to get course object from database id = $courseid");
         }
