@@ -7,7 +7,7 @@ require_once($CFG->dirroot.'/blocks/intelligent_learning/model/service/course.ph
 require_once($CFG->dirroot.'/blocks/intelligent_learning/model/response.php');
 
 class blocks_intelligent_learning_model_service_course_test extends advanced_testcase {
-    protected function setUp() {
+    protected function setUp(): void {
         $this->resetAfterTest();
     }
 
