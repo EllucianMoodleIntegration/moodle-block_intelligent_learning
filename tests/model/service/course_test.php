@@ -311,6 +311,8 @@ class blocks_intelligent_learning_model_service_course_test extends advanced_tes
             'shortname'			=> 'testphpunitparent',
             'fullname'			=> 'testphpunitparent',
             'idnumber'			=> 'testphpunitparent',
+            'startdate'			=> $course2data['startdate'],
+            'enddate'			=> $enddate,
             'enrollable'		=> '1',
             'visible'			=> '1',
             'children'			=> 'testphpunit1idnumber,testphpunit2idnumber',
